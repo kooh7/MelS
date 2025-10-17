@@ -22,6 +22,11 @@
     return self;
 }
 
+/*
+-(void)convertToNSArray{
+    NSMutableArray* array = [NSMutableArray alloc[init]];
+}
+*/
 
 -(void)setSignal:(float*)isig :(int)sigl{
     sig = isig;
@@ -33,45 +38,30 @@
     [self calculateMelSpec];
 }
 
-- (void)initWindow{  // hann
-    //sigWin = malloc(sizeof(double) * winSize);
+
+- (void)initWindow{  // hanning window
     double ds = (double)winSize - 1.0;
-    //double A = M_PI / ds;
     for( double i = 0.0; i < winSize; i+=1.0){
-        //double di = (double)i;
         sigWin[(int)i] = pow(sin( fmod(M_PI * i / ds, M_PI)), 2.0);
-        //printf("%f ", i);
     }
 }
 
 
 
-
 - (void)initDFT{
-    //dftmatrix = malloc(sizeof(float*) * dftSize);
-    //for (int i = 0; i < dftSize; ++i){
-    //    dftmatrix[i] = malloc(sizeof(float) * dftSize);
-    //}
     for ( int k = 0; k < dftSize; k++){
-        //dftmatrix[0][k] = 1.0f;
         dftmatrix[k] = 1.0f;
         if (k%2 == 0){
-            //dftmatrix[dftSize-1][k] = 1.0;
             dftmatrix[((dftSize-1) *dftSize) + k] = 1.0;
         }
         else{
-            //dftmatrix[dftSize-1][k] = -1.0f;
             dftmatrix[((dftSize-1) *dftSize) + k] = -1.0;
         }
     }
     
-    double ds = (double)dftSize;
-    
     for (int i = 1; i < (dftSize/2); i++){
         for ( int k = 0; k < dftSize; k++){
-            double angle = (2 * i * k) * M_PI / ds;
-            //dftmatrix[(i*2)-1][k] = cos(angle);
-            //dftmatrix[(i*2)][k] = sin(angle);
+            double angle = (2 * i * k) * M_PI / dftSize;
             dftmatrix[(((i*2)-1) *dftSize)  + k] = cos(angle);
             dftmatrix[(((i*2)) *dftSize)  + k] = sin(angle);
         }
@@ -82,12 +72,12 @@
     
     nframes = 1 + (int)floor( (siglen - dftSize)/(hopSize) );
     
-    winstart = (int*)malloc(sizeof(int) * nframes);
+    //winstart = (int*)malloc(sizeof(int) * nframes);
     windowedSignal = (float**)malloc(sizeof(float*) * nframes);
     windowedSig = (float**)malloc(sizeof(float*) * nframes);
     
     for(int i = 0; i < nframes; i++){
-        winstart[i] = i * hopSize;
+        //winstart[i] = i * hopSize;
         windowedSignal[i] = (float*)calloc(dftSize, sizeof(float));
         windowedSig[i] = (float*)calloc(dftSize, sizeof(float));
     }
@@ -104,7 +94,7 @@
         int instix = hopSize * i;
         
         coltot = 0.0f;
-        //wstart = winstart[i];
+
         
         if (siglen - instix < winSize){
             wsize = siglen - instix;
@@ -196,8 +186,6 @@
         double oddcoeff = 0.0;
         double evencoeff = 0.0;
         int oddix, evenix;
-             
-       
              
         for (int j = 0; j < dftSize; j++){
             oddcoeff += (dftmatrix[j] * sigptr[j]);
@@ -496,15 +484,6 @@ for (int k = 0; k < n_fft_bins; ++k) {
 */
 
 -(void) dealloc{
-    //free(sigWin);
-    free(winstart);
-    winstart = NULL;
-    //free(winend);
-   
-    //for (int i = 0; i < dftSize; ++i){
-    //    free(dftmatrix[i]);
-    //}
-    //free(dftmatrix);
     
     if(windowedSignal != NULL) {
         for( int i = 0; i < nframes; i++){

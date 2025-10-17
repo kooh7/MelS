@@ -13,13 +13,15 @@
 //#import <math.h>
 
 
+NSArray* convertC2NSarray(float*, int, int);
+
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
         // insert code here...
         //NSLog(@"Hello, World!");
         //NSString *inputStr = [NSString stringWithUTF8String:argv[1]];
         
-        printf("%f ", M_PI);
+        //printf("%f ", M_PI);
         
         //NString *inputStr = '/Users/ken/Documents/'
         //AudioLoader* aloader = [[AudioLoader alloc] initWithFilePath:inputStr];
@@ -27,32 +29,25 @@ int main(int argc, const char * argv[]) {
         //float* sig = [aloader audioFloatArray];
         //long siglen = [aloader numberOfSamples];
         
-        Melspec* mspec = [[Melspec alloc] init];
+        //Melspec* mspec = [[Melspec alloc] init];
         MelSpecD* mspecd = [[MelSpecD alloc] init];
 
         BinWriter* bwriter = [[BinWriter alloc] init];
-        NSString* path = @"/Users/ken/Documents/sigwin400.bin";
-        int entries = [mspec winsize];
-        [bwriter save1DCArray:[mspec sigwin] entries:entries toFile:path];
-        
+    
         NSString* pathD = @"/Users/ken/Documents/sigwinD400.bin";
-        entries = [mspecd winsize];
+        int entries = [mspecd winsize];
         [bwriter save1DCdblArray:[mspecd sigwin] entries:entries toFile:pathD];
         
-        NSString* pathM = @"/Users/ken/Documents/sigwinM400.bin";
-        int rows = [mspec melwinsize];
-        int cols = [mspec coefsize];
-        printf("rows %d cols %d", rows, cols);
-        [bwriter save2DCArray:[mspec melwin] rows:rows cols:cols toFile:pathM];
-        
         NSString* pathMD = @"/Users/ken/Documents/sigwinMD400.bin";
-        rows = [mspecd coefsize];
-        cols = [mspecd melwinsize];
+        int rows = [mspecd coefsize];
+        int cols = [mspecd melwinsize];
         [bwriter save1DCArray:[mspecd melwin] rows:rows cols:cols toFile:pathMD];
         //[bwriter save1DCdblArray:[mspecd melwin] rows:rows cols:cols toFile:pathMD];
         // melwindows[dftCoeffSize][mel_wins]
         
-        NSString *inputStr = @"/Users/ken/Documents/khel.wav";
+        
+        
+        NSString *inputStr = @"/Users/ken/Desktop/2_06.wav";
         AudioLoader* aloader = [[AudioLoader alloc] initWithFilePath:inputStr];
         [aloader loadAudioFileAndConvertToFloatArray];
         float* sig = [aloader audioFloatArray];
@@ -94,8 +89,9 @@ int main(int argc, const char * argv[]) {
                               rows:(NSInteger)nframes
                              cols:(NSInteger)dftCoeffSize
                         toFile:(NSString *)pathSpec];
+     
         
-        NSString* pathMel = @"/Users/ken/Documents/MelSpec.bin";
+        NSString* pathMel = @"/Users/ken/Desktop/2_06.bin";
         [bwriter save2DCdblArray:(float**)melSpectro
                               rows:(NSInteger)nframes
                              cols:(NSInteger)melwins
@@ -106,8 +102,15 @@ int main(int argc, const char * argv[]) {
     return 0;
 }
 
-
-
+/*
+NSArray* convertC2NSarray(float*, int rows, int cols){
+    NSMutableArray array =   ;
+    for (int i = 0; i < rows; i++){
+        NSArray rowarr =
+        array[i] = arr;
+    }
+}
+*/
 
 
 // call file loader with the file path

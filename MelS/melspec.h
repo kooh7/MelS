@@ -10,7 +10,6 @@
 #ifndef melspec_h
 #define melspec_h
 
-//#define dftSize 512
 #define dftSize 512
 #define winSize 400
 #define hopSize 160
