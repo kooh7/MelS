@@ -29,6 +29,17 @@
     return self;
 }
 
+- (void)setAudioFilePath:(NSString *)path{
+    NSURL *url = [NSURL fileURLWithPath:path];
+    NSError *error = nil;
+
+    // Initialize AVAudioFile for reading the audio file
+    self.audioFile = [[AVAudioFile alloc] initForReading:url error:&error];
+    if (error) {
+        NSLog(@"Error loading audio file: %@", error.localizedDescription);
+    }
+}
+
 - (BOOL)loadAudioFileAndConvertToFloatArray {
     NSError *error = nil;
 
@@ -50,6 +61,7 @@
 
     // Allocate memory for the float array (samples * channels)
     self.audioFloatArray = (float *)malloc(sizeof(float) * self.numberOfSamples * self.numberOfChannels);
+    
     if (self.audioFloatArray == NULL) {
         NSLog(@"Error allocating memory for float array.");
         return NO;

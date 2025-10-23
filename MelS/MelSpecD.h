@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreML/CoreML.h>
 
 #ifndef melspecD_h
 #define melspecD_h
@@ -15,10 +16,11 @@
 #define hopSize 160
 #define fs 16000.0
 #define dftCoeffSize 257
-#define melWins 128
+#define nMelWins 128
 #define minFreq 20.0
 #define maxFreq 8000.0
 #define preCoef 0.97
+#define maxLength 1024
 
 
 
@@ -34,11 +36,13 @@
 
     double sigWin[winSize];
     double dftmatrix[dftSize*dftSize];
-    float melWindows[melWins*dftSize];
+    float melWindows[nMelWins*dftSize];
     
     int nframes;
     double** spectro;
-    double** melSpectro;
+    float melSpectro[nMelWins*maxLength];
+    
+    MLMultiArray* mlArray;
 }
 
 
@@ -51,6 +55,7 @@
 - (void)windowSignal;
 - (void)calculateSpectro;
 - (void)calculateMelSpec;
+- (void)convertToMLMultiArray;
 
 - (double)melToHz:(double)melFreq;
 - (double)HzToMel:(double)hzf;
@@ -66,11 +71,15 @@
 - (int)melwinsize;
 - (int)coefsize;
 - (int)getNumFrames;
+- (int)getMaxLength;
 
 - (double**)getSpectro;
-- (double**)getMelSpectro;
+//- (double**)getMelSpectro;
+//- (double*)getMelSpectro;
+- (float*)getMelSpectro;
 - (float**)getWindowedSig;
 - (double*)getdftMat;
+- (MLMultiArray*)getMLarray;
 
 @end
 

@@ -5,7 +5,7 @@
 //  Created by Ken on 09/10/2025.
 //
 
-#import "binwriter.h"
+#import "BinWriter.h"
 
 @implementation BinWriter
 
@@ -68,6 +68,61 @@
     
     return success;
 }
+
+-(BOOL) saveFlatTo2DCdblArray:(double*)melSpectro                           // writes the MelSpec to a binary file
+                    rows:(NSInteger)nframes
+                    cols:(NSInteger)melwins
+                  toFile:(NSString *)filePath{
+    
+    NSMutableData* data =[NSMutableData data];
+    
+    [data appendBytes:&nframes length:sizeof(NSInteger)];
+    [data appendBytes:&melwins length:sizeof(NSInteger)];
+    
+    // Write the 2D array data (floats) to the binary file
+    for (NSInteger i = 0; i < nframes; i++) {
+        [data appendBytes:&melSpectro[i*melwins] length:melwins * sizeof(double)];
+    }
+    
+    // Write the data to the file
+    NSError *error = nil;
+    BOOL success = [data writeToFile:filePath atomically:YES];
+    
+    if (!success) {
+        NSLog(@"Failed to save file: %@", error.localizedDescription);
+    }
+    
+    return success;
+}
+    
+-(BOOL) saveFlatTo2DCArray:(float*)melSpectro                           // writes the MelSpec to a binary file
+                    rows:(NSInteger)nframes
+                    cols:(NSInteger)melwins
+                  toFile:(NSString *)filePath{
+    
+    NSMutableData* data =[NSMutableData data];
+    
+    [data appendBytes:&nframes length:sizeof(NSInteger)];
+    [data appendBytes:&melwins length:sizeof(NSInteger)];
+    
+    // Write the 2D array data (floats) to the binary file
+    for (NSInteger i = 0; i < nframes; i++) {
+        [data appendBytes:&melSpectro[i*melwins] length:melwins * sizeof(float)];
+    }
+    
+    // Write the data to the file
+    NSError *error = nil;
+    BOOL success = [data writeToFile:filePath atomically:YES];
+    
+    if (!success) {
+        NSLog(@"Failed to save file: %@", error.localizedDescription);
+    }
+    
+    return success;
+}
+
+
+
 
 
 - (BOOL) save1DCArray:(float*)array

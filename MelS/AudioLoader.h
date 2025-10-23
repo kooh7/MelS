@@ -22,6 +22,7 @@
 @property (nonatomic, assign) NSInteger numberOfChannels; // Number of channels (stereo = 2)
 
 - (instancetype)initWithFilePath:(NSString *)path;
+- (void)setAudioFilePath:(NSString *)path;
 - (BOOL)loadAudioFileAndConvertToFloatArray;
 
 @end

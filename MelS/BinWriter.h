@@ -23,6 +23,17 @@
          cols:(NSInteger)cols
          toFile:(NSString *)filePath;
 
+-(BOOL) saveFlatTo2DCdblArray:(double*)array                           // writes the MelSpec to a binary file
+                    rows:(NSInteger)rows
+                    cols:(NSInteger)cols
+                    toFile:(NSString *)filepath;
+
+-(BOOL) saveFlatTo2DCArray:(float*)array                           // writes the MelSpec to a binary file
+                    rows:(NSInteger)rows
+                    cols:(NSInteger)cols
+                    toFile:(NSString *)filePath;
+
+
 - (BOOL) save1DCArray:(float*)array
          entries:(NSInteger)entries
         toFile:(NSString *)filePath;
